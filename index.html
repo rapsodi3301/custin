@@ -220,10 +220,86 @@ footer{
   max-height:90vh;
   border-radius:18px;
 }
+.dl-modal{position:fixed;inset:0;display:none;z-index:9999}
+.dl-modal.open{display:block}
+body.modal-open{overflow:hidden}
+.dl-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(4px)}
+.dl-card{
+  position:relative;
+  width:min(560px, calc(100vw - 32px));
+  margin:10vh auto;
+  padding:22px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.12);
+  background:linear-gradient(180deg, rgba(15,15,18,.96), rgba(6,6,8,.96));
+  box-shadow:0 30px 90px rgba(0,0,0,.65);
+}
+.dl-x{
+  position:absolute;top:12px;right:12px;
+  width:36px;height:36px;border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.06);
+  color:rgba(255,255,255,.85);
+  font-size:22px;line-height:1;cursor:pointer;
+}
+.dl-title{
+  font-size:34px;
+  letter-spacing:.5px;
+  margin:2px 0 6px;
+  font-family:inherit;
+  text-transform:uppercase;
+}
+.dl-sub{
+  color:rgba(255,255,255,.7);
+  margin:0 0 18px;
+}
+.dl-btn{
+  width:100%;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 18px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.04);
+  color:#fff;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.9px;
+  cursor:pointer;
+  margin:12px 0 0;
+}
+.dl-btn:active{transform:translateY(1px)}
+.dl-new{
+  border-color:rgba(255,122,24,.55);
+  background:linear-gradient(180deg, rgba(255,122,24,.85), rgba(255,122,24,.55));
+  color:#100c06;
+}
+.dl-old{
+  background:rgba(255,255,255,.03);
+}
+.dl-ico{font-size:18px;opacity:.9}
 </style>
 <script>
-const DOWNLOAD_URL = "https://www.dropbox.com/scl/fi/uxnqps1svjbabjzzunan0/SylrethInstaller.zip?rlkey=wut9tdgpgqmnqb8o7v80m7pb1&st=titp5ss8&dl=1";
-function downloadGame(){window.open(DOWNLOAD_URL,"_blank","noopener,noreferrer");}
+const DOWNLOAD_NEW = "https://www.dropbox.com/scl/fi/uxnqps1svjbabjzzunan0/SylrethInstaller.zip?rlkey=wut9tdgpgqmnqb8o7v80m7pb1&st=smb4e1w8&dl=1";
+const DOWNLOAD_OLD = "https://www.dropbox.com/scl/fi/0dzw0nkitpq4jifc9nyt3/Sylreth_OldVersion.zip?rlkey=90t9xekizbf9xx9wbv466qr61&st=2m7nsu4d&dl=1";
+
+function openDownloadModal(){
+  const m = document.getElementById("dlModal");
+  if(!m) return;
+  m.classList.add("open");
+  document.body.classList.add("modal-open");
+}
+
+function closeDownloadModal(){
+  const m = document.getElementById("dlModal");
+  if(!m) return;
+  m.classList.remove("open");
+  document.body.classList.remove("modal-open");
+}
+
+function downloadNew(){ window.open(DOWNLOAD_NEW, "_blank", "noopener,noreferrer"); closeDownloadModal(); }
+function downloadOld(){ window.open(DOWNLOAD_OLD, "_blank", "noopener,noreferrer"); closeDownloadModal(); }
+
+document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeDownloadModal(); });
 </script>
 </head>
 
@@ -236,7 +312,7 @@ function downloadGame(){window.open(DOWNLOAD_URL,"_blank","noopener,noreferrer")
       <a href="#about">About</a>
       <a href="#gallery">Screenshots</a>
       <a href="#faq">FAQ</a>
-      <a href="javascript:void(0)" onclick="downloadGame()">Download</a>
+      <a href="javascript:void(0)" data-download="1" data-download="1">Download</a>
     </div>
   </div>
 </nav>
@@ -251,7 +327,7 @@ function downloadGame(){window.open(DOWNLOAD_URL,"_blank","noopener,noreferrer")
         the entire world together.
       </p>
       <div class="cta">
-        <a class="btn primary" href="javascript:void(0)" onclick="downloadGame()">Download Demo</a>
+        <a class="btn primary" href="javascript:void(0)" data-download="1" data-download="1">Download Demo</a>
         <a class="btn" href="#gallery">View Screenshots</a>
       </div>
     </div>
@@ -356,11 +432,10 @@ function downloadGame(){window.open(DOWNLOAD_URL,"_blank","noopener,noreferrer")
     <div class="download-box">
       <a
         class="btn primary"
-        href="https://www.dropbox.com/scl/fi/uxnqps1svjbabjzzunan0/SylrethInstaller.zip?rlkey=wut9tdgpgqmnqb8o7v80m7pb1&st=titp5ss8&dl=1"
+        href="https://www.dropbox.com/scl/fi/uxnqps1svjbabjzzunan0/SylrethInstaller.zip?rlkey=wut9tdgpgqmnqb8o7v80m7pb1&st=smb4e1w8&dl=1"
         target="_blank"
         rel="noopener noreferrer"
-      >
-        Download Demo
+       data-download="1">Download Demo
       </a>
     </div>
   </div>
@@ -395,5 +470,31 @@ lb.addEventListener("click", ()=> {
 });
 </script>
 
+<div class="dl-modal" id="dlModal" aria-hidden="true">
+  <div class="dl-backdrop" onclick="closeDownloadModal()"></div>
+  <div class="dl-card" role="dialog" aria-modal="true" aria-labelledby="dlTitle">
+    <button class="dl-x" type="button" onclick="closeDownloadModal()" aria-label="Close">×</button>
+    <div class="dl-title" id="dlTitle">Select Version</div>
+    <div class="dl-sub">Choose which version of Sylreth you want to download.</div>
+
+    <button class="dl-btn dl-new" type="button" onclick="downloadNew()">
+      <span>New Version</span>
+      <span class="dl-ico" aria-hidden="true">⭳</span>
+    </button>
+
+    <button class="dl-btn dl-old" type="button" onclick="downloadOld()">
+      <span>Old Version</span>
+      <span class="dl-ico" aria-hidden="true">↺</span>
+    </button>
+  </div>
+</div>
+<script>
+document.addEventListener("click",(e)=>{
+  const el = e.target.closest("[data-download]");
+  if(!el) return;
+  e.preventDefault();
+  openDownloadModal();
+});
+</script>
 </body>
 </html>
