@@ -221,6 +221,10 @@ footer{
   border-radius:18px;
 }
 </style>
+<script>
+const DOWNLOAD_URL = "https://www.dropbox.com/scl/fi/uxnqps1svjbabjzzunan0/SylrethInstaller.zip?rlkey=wut9tdgpgqmnqb8o7v80m7pb1&st=titp5ss8&dl=1";
+function downloadGame(){window.open(DOWNLOAD_URL,"_blank","noopener,noreferrer");}
+</script>
 </head>
 
 <body>
@@ -232,7 +236,7 @@ footer{
       <a href="#about">About</a>
       <a href="#gallery">Screenshots</a>
       <a href="#faq">FAQ</a>
-      <a href="#download">Download</a>
+      <a href="javascript:void(0)" onclick="downloadGame()">Download</a>
     </div>
   </div>
 </nav>
@@ -247,7 +251,7 @@ footer{
         the entire world together.
       </p>
       <div class="cta">
-        <a class="btn primary" href="#download">Download Demo</a>
+        <a class="btn primary" href="javascript:void(0)" onclick="downloadGame()">Download Demo</a>
         <a class="btn" href="#gallery">View Screenshots</a>
       </div>
     </div>
@@ -352,7 +356,7 @@ footer{
     <div class="download-box">
       <a
         class="btn primary"
-        href="https://www.dropbox.com/scl/fi/uxnqps1svjbabjzzunan0/SylrethInstaller.zip?rlkey=wut9tdgpgqmnqb8o7v80m7pb1&e=1&st=titp5ss8&dl=1"
+        href="https://www.dropbox.com/scl/fi/uxnqps1svjbabjzzunan0/SylrethInstaller.zip?rlkey=wut9tdgpgqmnqb8o7v80m7pb1&st=titp5ss8&dl=1"
         target="_blank"
         rel="noopener noreferrer"
       >
